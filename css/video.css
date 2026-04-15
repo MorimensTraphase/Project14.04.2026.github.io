@@ -4,14 +4,14 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Это критично для ровных сеток */
 }
 
 body {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     color: #fff;
-    background-color: #03011a;
+    background-color: #03011a; /* Глубокий темный фон под дизайн на скрине */
     overflow-x: hidden;
 }
 
@@ -29,9 +29,7 @@ img {
 .wrapper {
     background: linear-gradient(90deg, rgba(10, 11, 13, 1) 8%, rgba(5, 3, 41, 1) 78%);
     width: 100%;
-    min-height: 100vh; /* Растягивает фон на весь экран */
-    display: flex;
-    flex-direction: column;
+    min-height: 100vh;
 }
 
 .container {
@@ -40,11 +38,11 @@ img {
     padding: 0 1rem;
 }
 
-/* 3. ШАПКА И МЕНЮ */
+/* 3. ШАПКА И МЕНЮ (Тот самый дизайн со скрина) */
 header {
     padding: 2rem 0;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: nowrap; /* Чтобы шапка не разваливалась */
     justify-content: space-between;
     align-items: center;
     gap: 1.5rem;
@@ -58,14 +56,14 @@ header .logo {
 
 header nav ul {
     display: flex;
-    flex-wrap: nowrap;
-    gap: clamp(1rem, 2vw, 2.5rem);
+    flex-wrap: nowrap; /* ГАРАНТИЯ, что меню будет в одну линию */
+    gap: clamp(1rem, 2vw, 2.5rem); /* Расстояние между кнопками */
     list-style: none;
     align-items: center;
 }
 
 header nav ul li {
-    white-space: nowrap;
+    white-space: nowrap; /* Запрет переноса слов типа "Interesting Facts" */
 }
 
 header nav ul li a {
@@ -77,6 +75,7 @@ header nav ul li a {
     position: relative;
 }
 
+/* Эффекты меню (Синее свечение) */
 header nav ul li a:hover, 
 header nav ul li.active a {
     color: #3498db;
@@ -84,22 +83,20 @@ header nav ul li.active a {
     border-bottom: 2px solid #3498db;
 }
 
-/* 4. СЕТКА КАРТОЧЕК И КОНТЕНТ */
+/* 4. СЕТКА КАРТОЧЕК (Для фактов и видео) */
 .hero {
     padding: 40px 0;
-    flex: 1; /* Заполняет пустое место */
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Центрирует текст по вертикали */
 }
 
 .builds {
     display: grid;
+    /* 3 колонки на ПК, 1 на телефоне — всё само подстроится */
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
     padding: 20px 0;
 }
 
+/* Стиль карточки (универсальный) */
 .build {
     background: rgba(20, 20, 40, 0.4);
     border: 1px solid rgba(52, 152, 219, 0.2);
@@ -118,17 +115,19 @@ header nav ul li.active a {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
+/* Картинки на странице фактов */
 .build img {
     border-radius: 10px;
     margin-bottom: 1.2rem;
     width: 100%;
-    height: 200px;
-    object-fit: cover;
+    height: 200px; /* Фикс высоты, чтобы сетка была ровной */
+    object-fit: cover; /* Фото не будут сплющенными */
 }
 
+/* Плеер на странице видео */
 .video-box {
     position: relative;
-    padding-bottom: 56.25%;
+    padding-bottom: 56.25%; /* 16:9 пропорция */
     height: 0;
     overflow: hidden;
     border-radius: 10px;
@@ -142,6 +141,7 @@ header nav ul li.active a {
     border: 0;
 }
 
+/* Текст внутри карточек */
 .build p {
     font-size: 1.1rem;
     line-height: 1.6;
@@ -149,11 +149,9 @@ header nav ul li.active a {
     color: #e0e0e0;
 }
 
-/* 5. АДАПТИВНОСТЬ */
+/* 5. АДАПТИВНОСТЬ (Для телефонов) */
 @media (max-width: 850px) {
     header {
-        flex-direction: column;
+        flex-direction: column; /* Лого над меню */
         gap: 1rem;
         text-align: center;
-    }
-}
