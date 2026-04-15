@@ -147,18 +147,28 @@ header nav ul li.active a {
         gap: 1rem;
         text-align: center;
         
+/* 1. Оболочка (Wrapper) */
 .wrapper {
     background: linear-gradient(90deg, rgba(10, 11, 13, 1) 8%, rgba(5, 3, 41, 1) 78%);
     width: 100%;
-    min-height: 100vh; /* Гарантирует высоту на весь экран */
-    display: flex;         /* ВКЛЮЧАЕМ ЭТО */
-    flex-direction: column; /* ВКЛЮЧАЕМ ЭТО */
+    min-height: 100vh; /* Растягиваем фон на всю высоту окна браузера */
+    display: flex;
+    flex-direction: column; /* Контент идет сверху вниз (шапка -> тело -> футер) */
 }
 
+/* 2. Основная часть (Hero) */
 .hero {
-    padding: 40px 0;
-    flex: 1;               /* ЗАСТАВЛЯЕТ РАСТЯНУТЬСЯ */
-    display: flex;         /* ВКЛЮЧАЕМ ЭТО */
-    flex-direction: column; 
-    justify-content: center; /* ЦЕНТРИРУЕТ ПО ВЕРТИКАЛИ */
+    flex: 1; /* Этот блок забирает все СВОБОДНОЕ место между шапкой и футером */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Центрирует текст по вертикали */
+    align-items: center;     /* Центрирует текст по горизонтали */
+    text-align: center;      /* Выравнивает строки текста по центру */
+    padding: 2rem 0;
+}
+
+/* 3. Ограничитель для текста (Hero Info) */
+.hero--info {
+    max-width: 900px; /* Чтобы на широких ТВ текст не растягивался в одну длинную неудобную строку */
+    width: 100%;
 }
