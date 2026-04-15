@@ -82,6 +82,10 @@ header nav ul li {
     font-weight: 700;
  }
 
+ .hero img {
+  margin-top: 12px; 
+}
+
 /* Оранжевая полоска при наведении (десктоп) */
 header nav ul li:not(.active) a:hover {
     border-bottom: 5px solid #D17338;
@@ -100,6 +104,49 @@ header nav ul li a {
     transition: border-bottom 0.2s ease;
 }
 
+.hero {
+    padding: 20px 0;
+}
+
+.builds {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.build {
+    background: rgba(20, 20, 40, 0.4);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.build img {
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.build p {
+    font-size: clamp(1.1rem, 3vw, 1.6rem);   /* раньше 33px — слишком много */
+    line-height: 1.6;
+    margin: 1.2rem 0;
+}
+
+
+ /* Специально для очень больших экранов */
+@media (min-width: 1900px) {
+    :root {
+        font-size: 18px; /* Немного увеличиваем базовый размер шрифта */
+    }
+    .container {
+        max-width: 1400px; /* Можно чуть расширить контейнер для ТВ */
+    }
+}
+/* Контейнер самого квиза внутри рамочки */
+.quiz-container {
+    padding: 1.5rem;
+    text-align: center;
+}
  .hero {
     padding: 2rem 0 4rem;
     position: relative;
