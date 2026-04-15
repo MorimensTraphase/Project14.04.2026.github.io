@@ -4,15 +4,17 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* Это критично для ровных сеток */
+    box-sizing: border-box;
 }
 
 body {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     color: #fff;
-    background-color: #03011a; /* Глубокий темный фон под дизайн на скрине */
+    background-color: #03011a;
     overflow-x: hidden;
+    /* Убираем лишние отступы, которые могут мешать центровке */
+    min-height: 100vh;
 }
 
 a {
@@ -25,27 +27,32 @@ img {
     display: block;
 }
 
-/* 2. Оболочка и Контейнер */
+/* 2. Оболочка и Контейнер — ТУТ ПРАВКИ ДЛЯ РАСТЯГИВАНИЯ */
 .wrapper {
     background: linear-gradient(90deg, rgba(10, 11, 13, 1) 8%, rgba(5, 3, 41, 1) 78%);
     width: 100%;
+    /* Flexbox делает так, чтобы футер был внизу, а контент в центре */
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
 }
 
 .container {
+    /* min(100% - 2rem, 1300px) отлично подходит для ТВ, не дает контенту расплыться слишком широко */
     width: min(100% - 2rem, 1300px);
     margin: 0 auto;
     padding: 0 1rem;
 }
 
-/* 3. ШАПКА И МЕНЮ (Тот самый дизайн со скрина) */
+/* 3. ШАПКА И МЕНЮ (Без изменений дизайна) */
 header {
     padding: 2rem 0;
     display: flex;
-    flex-wrap: nowrap; /* Чтобы шапка не разваливалась */
+    flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
     gap: 1.5rem;
+    flex-shrink: 0; /* Шапка не сжимается */
 }
 
 header .logo {
@@ -56,14 +63,14 @@ header .logo {
 
 header nav ul {
     display: flex;
-    flex-wrap: nowrap; /* ГАРАНТИЯ, что меню будет в одну линию */
-    gap: clamp(1rem, 2vw, 2.5rem); /* Расстояние между кнопками */
+    flex-wrap: nowrap;
+    gap: clamp(1rem, 2vw, 2.5rem);
     list-style: none;
     align-items: center;
 }
 
 header nav ul li {
-    white-space: nowrap; /* Запрет переноса слов типа "Interesting Facts" */
+    white-space: nowrap;
 }
 
 header nav ul li a {
@@ -75,7 +82,6 @@ header nav ul li a {
     position: relative;
 }
 
-/* Эффекты меню (Синее свечение) */
 header nav ul li a:hover, 
 header nav ul li.active a {
     color: #3498db;
@@ -83,20 +89,25 @@ header nav ul li.active a {
     border-bottom: 2px solid #3498db;
 }
 
-/* 4. СЕТКА КАРТОЧЕК (Для фактов и видео) */
+/* 4. СЕТКА И ГЛАВНЫЙ КОНТЕНТ — ТУТ ПРАВКИ ДЛЯ ЦЕНТРОВКИ */
 .hero {
     padding: 40px 0;
+    /* Это свойство заставляет блок занимать ВСЁ свободное место на странице */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Центрирует текст по вертикали на главной */
 }
 
 .builds {
     display: grid;
-    /* 3 колонки на ПК, 1 на телефоне — всё само подстроится */
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
     padding: 20px 0;
+    width: 100%;
 }
 
-/* Стиль карточки (универсальный) */
+/* Стиль карточки */
 .build {
     background: rgba(20, 20, 40, 0.4);
     border: 1px solid rgba(52, 152, 219, 0.2);
@@ -115,19 +126,17 @@ header nav ul li.active a {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-/* Картинки на странице фактов */
 .build img {
     border-radius: 10px;
     margin-bottom: 1.2rem;
     width: 100%;
-    height: 200px; /* Фикс высоты, чтобы сетка была ровной */
-    object-fit: cover; /* Фото не будут сплющенными */
+    height: 200px;
+    object-fit: cover;
 }
 
-/* Плеер на странице видео */
 .video-box {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 пропорция */
+    padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
     border-radius: 10px;
@@ -141,7 +150,6 @@ header nav ul li.active a {
     border: 0;
 }
 
-/* Текст внутри карточек */
 .build p {
     font-size: 1.1rem;
     line-height: 1.6;
@@ -149,9 +157,26 @@ header nav ul li.active a {
     color: #e0e0e0;
 }
 
-/* 5. АДАПТИВНОСТЬ (Для телефонов) */
+/* Футер (чтобы всегда был внизу) */
+.footer {
+    flex-shrink: 0; /* Футер не сжимается */
+}
+
+/* 5. АДАПТИВНОСТЬ */
 @media (max-width: 850px) {
     header {
-        flex-direction: column; /* Лого над меню */
+        flex-direction: column;
         gap: 1rem;
         text-align: center;
+    }
+}
+
+/* Дополнительно для очень больших ТВ (4K+) */
+@media (min-width: 2000px) {
+    .container {
+        max-width: 1800px; /* Увеличиваем макс-ширину для ТВ, чтобы не было слишком пусто */
+    }
+    .builds {
+        grid-template-columns: repeat(4, 1fr); /* На ТВ можно 4 карточки в ряд */
+    }
+}
