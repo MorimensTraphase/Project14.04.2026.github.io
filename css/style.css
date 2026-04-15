@@ -1,0 +1,38 @@
+/* Шапка сайта */
+.navbar {
+    width: 100%;
+    background-color: #2c3e50;
+    display: flex;
+    justify-content: space-around; /* Распределяем лого и ссылки по краям */
+    align-items: center;
+    padding: 15px 0;
+    position: fixed; /* Приклеиваем к верху */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Чтобы меню было поверх всего */
+}
+
+.logo {
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+.menu-links a {
+    color: #bdc3c7;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.menu-links a:hover {
+    color: #ffffff; /* Белеет при наведении */
+}
+
+/* Контент должен начинаться ниже меню, иначе оно его перекроет */
+body {
+    padding-top: 80px;
+    background-color: #f4f7f6;
+}

@@ -216,12 +216,4 @@ header nav ul li a {
     top : -150px;
     right : 0px;
     padding-top: 200px;
-}/* Специально для очень больших экранов */
-@media (min-width: 1900px) {
-    :root {
-        font-size: 18px; /* Немного увеличиваем базовый размер шрифта */
-    }
-    .container {
-        max-width: 1400px; /* Можно чуть расширить контейнер для ТВ */
-    }
 }
