@@ -149,66 +149,92 @@ header nav ul li.active a {
     color: #e0e0e0;
 }
 
-/* Полная центровка для главной страницы */
+/* --- ЦЕНТРОВКА И СТИЛЬ ГЛАВНОЙ СТРАНИЦЫ --- */
+
 .hero {
     flex: 1 !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: center !important; /* Центр по вертикали */
-    align-items: center !important;     /* Центр по горизонтали */
-    text-align: center !important;      /* Текст внутри тоже в центр */
-    min-height: 70vh;                   /* Принудительная высота */
+    justify-content: center !important; 
+    align-items: center !important;     
+    text-align: center !important;      
+    min-height: 75vh; /* Чуть увеличил, чтобы текст был ровно по центру */
+    padding: 20px 0;
 }
 
 .hero--info {
     width: 100% !important;
-    max-width: 800px !important;
-    margin: 0 auto !important; /* Гарантирует отступ со всех сторон */
+    max-width: 900px !important;
+    margin: 0 auto !important;
 }
 
-/* Убираем рамки и фон для текстовых блоков на главной */
-.content-card {
+/* УБИРАЕМ РАМКИ ТОЛЬКО НА ГЛАВНОЙ (внутри .hero) */
+.hero .content-card, 
+.hero .info-item,
+.hero .build {
     background: none !important;
     border: none !important;
     box-shadow: none !important;
-    padding: 0 !important; /* Убираем лишние внутренние отступы */
+    padding: 10px 0 !important;
+    transform: none !important; /* Убираем "подпрыгивание" на главной */
 }
 
-.info-item {
+/* ОТСТУПЫ МЕЖДУ ТЕКСТОМ НА ГЛАВНОЙ */
+.hero--info h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem) !important;
+    margin-bottom: 35px !important; /* Отступ под главным заголовком */
+}
+
+.hero--info h2 {
+    margin-bottom: 20px !important; /* Отступ под флагами */
+}
+
+.hero .content-card h2 {
+    margin-top: 30px !important;
+    margin-bottom: 15px !important;
+}
+
+.hero .info-grid {
+    margin-top: 40px !important; /* Отступ перед блоками Language/Culture */
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 25px !important; /* Расстояние между пунктами Language и Culture */
+}
+
+.hero .info-item h3 {
+    margin-bottom: 12px !important;
+    color: #3498db;
+    font-size: 1.5rem !important;
+}
+
+/* Эффект ховера на главной делаем минимальным, только для текста */
+.hero .info-item:hover {
     background: none !important;
-    border: none !important;
-    padding: 1rem 0 !important; /* Оставляем только небольшие отступы между пунктами */
 }
 
-/* Чтобы текст не слипался, добавим немного расстояния между заголовками */
-.hero--info h1, .hero--info h2 {
-    margin-bottom: 20px !important;
+/* --- ОСТАЛЬНЫЕ СТРАНИЦЫ (Карточки с рамками) --- */
+
+/* Эти стили сработают там, где НЕТ класса .hero (например, на страницах видео и фактов) */
+.builds:not(.hero .builds) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    padding: 20px 0;
 }
 
-.info-item h3 {
-    margin-bottom: 10px !important;
-    color: #3498db; /* Оставляем красивый голубой акцент для подзаголовков */
-}
-
-.info-item:hover {
-    background: rgba(52, 152, 219, 0.1);
-}
-
-/* 6. Футер */
+/* --- ФУТЕР --- */
 .footer {
     padding: 2rem 0;
     text-align: center;
     opacity: 0.6;
     flex-shrink: 0;
+    margin-top: auto; /* Прижимает футер к низу */
 }
 
-/* 7. Адаптивность для телефонов */
+/* --- АДАПТИВ --- */
 @media (max-width: 850px) {
     header {
         flex-direction: column;
         gap: 1rem;
-    }
-    .content-card {
-        padding: 1.5rem;
     }
 }
