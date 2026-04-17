@@ -3,66 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Quizzes</title>
+    <title>Quizess</title>
     <link rel="stylesheet" href="css/video.css">
-       <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
     <style>
-        /* Основной контейнер квиза */
+        /* СТИЛИ ПРОГРЕСС-БАРА */
+        .progress-container {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1); /* Фон дорожки */
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden; /* Чтобы полоска не вылезала за края */
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%; /* В начале ширина 0 */
+            background: linear-gradient(90deg, #3498db, #2ecc71); /* Красивый градиент из синего в зеленый */
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.5); /* Эффект свечения */
+            transition: width 0.5s ease-out; /* Плавная анимация роста */
+        }
+
+        /* Остальные стили из прошлого кода */
         .quiz-container { text-align: center; padding: 20px; width: 100%; }
-        
-        /* Сетка для кнопок ответов: 2 колонки на ПК */
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        
-        /* Адаптация: на мобилках кнопки встают в одну колонку */
-        @media (max-width: 600px) {
-            .options-grid { grid-template-columns: 1fr; }
-        }
-
-        /* Стиль кнопок выбора ответа */
-        .option-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #3498db;
-            color: white;
-            padding: 15px;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.3s;
-            font-size: 1rem;
-        }
-        /* Эффект наведения на кнопку */
+        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+        .option-btn { background: rgba(255,255,255,0.1); border: 1px solid #3498db; color: white; padding: 15px; cursor: pointer; border-radius: 8px; transition: 0.3s; }
         .option-btn:hover:not(:disabled) { background: #3498db; transform: translateY(-2px); }
-        /* Состояние кнопки после клика (отключена) */
-        .option-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        /* Контейнер для карточек выбора тем */
-        .quiz-menu {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        /* Стиль карточки темы */
-        .menu-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid #3498db;
-            padding: 25px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .menu-card:hover { 
-            background: rgba(52, 152, 219, 0.2); 
-            transform: scale(1.03);
-        }
-
-        /* Текст результата (Правильно/Неправильно) */
-        #result-text { margin-top: 20px; font-weight: bold; min-height: 24px; font-size: 1.2rem; }
-        
-        /* Кнопка "Следующий вопрос" */
-        .next-btn {
-            margin-top: 20px; background: #D17338; border: none; padding: 12px 40px;
-            color: white; border-radius: 30px; display: none; cursor: pointer; font-weight: bold;
-        }
+        .option-btn:disabled { opacity: 0.6; }
+        .quiz-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 30px; }
+        .menu-card { background: rgba(255,255,255,0.05); border: 2px solid #3498db; padding: 25px; border-radius: 15px; cursor: pointer; transition: 0.3s; }
+        .menu-card:hover { background: rgba(52,152,219,0.2); transform: scale(1.03); }
+        #result-text { margin-top: 20px; font-weight: bold; font-size: 1.2rem; }
+        .next-btn { margin-top: 20px; background: #D17338; border: none; padding: 12px 40px; color: white; border-radius: 30px; display: none; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -72,7 +46,7 @@
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="sborki.html">Interesting Facts</a></li>
+                    <li><a href="sborki.html">Interested Facts</a></li>
                     <li><a href="video.html">Videos</a></li>
                     <li class="active"><a href="quiz.html">Quizzes</a></li>
                     <li><a href="games.html">Mini Games</a></li>
@@ -96,21 +70,24 @@
                     </div>
 
                     <div id="quiz-game" style="display: none;">
-                        <button style="background:none; border:1px solid #555; color:#ccc; cursor:pointer; padding:5px 10px; border-radius:10px;" onclick="location.reload()">← Back</button>
-                        <div id="progress" style="margin:10px 0; opacity:0.6;"></div>
+                        <div class="progress-container">
+                            <div id="progress-bar" class="progress-fill"></div>
+                        </div>
+
+                        <button style="background:none; border:1px solid #555; color:#ccc; cursor:pointer; padding:5px 10px; border-radius:10px; margin-bottom: 15px;" onclick="location.reload()">← Back</button>
+                        <div id="progress" style="margin-bottom: 10px; opacity: 0.6; font-size: 0.9rem;"></div>
                         <h2 id="question"></h2>
                         <div id="options" class="options-grid"></div>
                         <div id="result-text"></div>
                         <button id="next-btn" class="next-btn" onclick="nextQuestion()">Next Question →</button>
                     </div>
-
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        // БАЗА ДАННЫХ ВОПРОСОВ (80 штук)
+        // БАЗА ДАННЫХ (оставил по несколько для примера, вставь свои 20)
         const allQuizzes = {
             general: [
                 { q: "What do British people typically add to their tea?", a: ["Lemon", "Milk", "Salt", "Honey"], correct: 1 },
@@ -202,76 +179,77 @@
             ]
         };
 
-        // ТЕХНИЧЕСКИЕ ПЕРЕМЕННЫЕ
-        let currentQuestions = []; // Массив вопросов выбранной темы
-        let currentQ = 0;           // Номер текущего вопроса (начинаем с 0)
-        let score = 0;              // Счетчик правильных ответов
+        let currentQuestions = [];
+        let currentQ = 0;
+        let score = 0;
 
-        // ФУНКЦИЯ ЗАПУСКА ТЕСТА
         function startQuiz(type) {
-            currentQuestions = allQuizzes[type]; // Загружаем вопросы по ключу (напр. 'history')
-            currentQ = 0; // Сбрасываем номер вопроса
-            score = 0;    // Сбрасываем счет
-            document.getElementById("quiz-selection").style.display = "none"; // Прячем меню
-            document.getElementById("quiz-game").style.display = "block";      // Показываем игру
-            loadQuestion(); // Вызываем отрисовку вопроса
+            currentQuestions = allQuizzes[type];
+            currentQ = 0;
+            score = 0;
+            document.getElementById("quiz-selection").style.display = "none";
+            document.getElementById("quiz-game").style.display = "block";
+            updateProgressBar(); // Обнуляем полоску в начале
+            loadQuestion();
         }
 
-        // ФУНКЦИЯ ОТРИСОВКИ ВОПРОСА
+        // ОБНОВЛЕНИЕ ПОЛОСКИ ПРОГРЕССА
+        function updateProgressBar() {
+            // Вычисляем процент: (текущий вопрос / общее кол-во) * 100
+            const percent = (currentQ / currentQuestions.length) * 100;
+            document.getElementById("progress-bar").style.width = percent + "%";
+        }
+
         function loadQuestion() {
-            const qData = currentQuestions[currentQ]; // Получаем данные текущего вопроса
-            // Обновляем текст прогресса (напр. "Question 5 of 20")
+            updateProgressBar(); // Обновляем полоску при каждом новом вопросе
+            const qData = currentQuestions[currentQ];
             document.getElementById("progress").innerText = `Question ${currentQ + 1} of ${currentQuestions.length}`;
-            document.getElementById("question").innerText = qData.q; // Вставляем сам вопрос
+            document.getElementById("question").innerText = qData.q;
             
             const optionsDiv = document.getElementById("options");
-            optionsDiv.innerHTML = ""; // Очищаем старые кнопки
-            document.getElementById("result-text").innerText = ""; // Очищаем текст ответа
-            document.getElementById("next-btn").style.display = "none"; // Прячем кнопку "Дальше"
+            optionsDiv.innerHTML = "";
+            document.getElementById("result-text").innerText = "";
+            document.getElementById("next-btn").style.display = "none";
 
-            // Создаем кнопки для каждого варианта ответа
             qData.a.forEach((opt, index) => {
                 const btn = document.createElement("button");
                 btn.className = "option-btn";
                 btn.innerText = opt;
-                btn.onclick = () => checkAnswer(index); // При клике вызываем проверку
-                optionsDiv.appendChild(btn); // Добавляем кнопку на страницу
+                btn.onclick = () => checkAnswer(index);
+                optionsDiv.appendChild(btn);
             });
         }
 
-        // ФУНКЦИЯ ПРОВЕРКИ ОТВЕТА
         function checkAnswer(index) {
-            const correct = currentQuestions[currentQ].correct; // Правильный индекс из базы
+            const correct = currentQuestions[currentQ].correct;
             const res = document.getElementById("result-text");
-            // Отключаем все кнопки после клика, чтобы нельзя было нажать дважды
             document.querySelectorAll(".option-btn").forEach(b => b.disabled = true);
 
             if(index === correct) {
                 res.innerText = "Correct! ✨";
-                res.style.color = "#2ecc71"; // Зеленый цвет
+                res.style.color = "#2ecc71";
                 score++;
             } else {
-                // Если ошибка — показываем правильный вариант
-                res.innerText = "Wrong! Correct answer: " + currentQuestions[currentQ].a[correct];
-                res.style.color = "#e74c3c"; // Красный цвет
+                res.innerText = "Wrong! Answer: " + currentQuestions[currentQ].a[correct];
+                res.style.color = "#e74c3c";
             }
-            document.getElementById("next-btn").style.display = "inline-block"; // Показываем кнопку перехода
+            document.getElementById("next-btn").style.display = "inline-block";
         }
 
-        // ФУНКЦИЯ ПЕРЕХОДА К СЛЕДУЮЩЕМУ ВОПРОСУ
         function nextQuestion() {
-            currentQ++; // Увеличиваем индекс вопроса
+            currentQ++;
             if(currentQ < currentQuestions.length) {
-                // Если вопросы еще есть — грузим следующий
                 loadQuestion();
             } else {
-                // Если вопросы закончились — считаем процент и выводим финал
-                const percent = Math.round((score / currentQuestions.length) * 100);
-                let message = percent > 80 ? "Culture Master! 🏆" : "Well Done! 👍";
+                // В конце заполняем полоску на 100%
+                document.getElementById("progress-bar").style.width = "100%";
+                
+                const finalPercent = Math.round((score / currentQuestions.length) * 100);
+                let rank = finalPercent > 80 ? "Culture Master! 🏆" : "Well Done! 👍";
                 
                 document.getElementById("quiz-game").innerHTML = 
-                    `<h2 style="font-size: 2.5rem; color: #3498db;">${message}</h2>` +
-                    `<p style="font-size: 1.5rem; margin: 20px 0;">Final Result: ${score} / ${currentQuestions.length} (${percent}%)</p>` +
+                    `<h2 style="font-size: 2.5rem; color: #3498db;">${rank}</h2>` +
+                    `<p style="font-size: 1.5rem; margin: 20px 0;">Score: ${score} / ${currentQuestions.length} (${finalPercent}%)</p>` +
                     `<button class="next-btn" style="display:block; margin: 0 auto;" onclick="location.reload()">Back to Menu</button>`;
             }
         }
