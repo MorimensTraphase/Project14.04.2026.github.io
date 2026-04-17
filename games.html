@@ -4,58 +4,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Mini Games - UK vs Poland</title>
+    <title>Mini Games</title>
+    
     <link rel="stylesheet" href="css/main.css"> 
+
     <style>
-        .game-section { padding: 40px 0; color: white; text-align: center; }
-        .game-nav { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px; }
-        
-        .game-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px; padding: 30px; width: 260px;
-            transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; align-items: center;
+        /* --- ОФОРМЛЕНИЕ ИГРОВОЙ СЕКЦИИ --- */
+        .game-section {
+            padding: 60px 0;
+            color: #ffffff;
+            text-align: center;
+            font-family: sans-serif;
         }
-        .game-card:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-10px); border-color: #ffcc00; }
-        .game-card h3 { color: #ffcc00; margin-bottom: 10px; font-size: 1.4rem; }
 
-        #sorting-game { display: none; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* --- ЛОББИ (ГЛАВНОЕ МЕНЮ ИГР) --- */
+        .game-lobby-container {
+            display: block; /* Показываем меню при загрузке */
+            transition: all 0.5s ease-in-out;
+        }
 
-        .draggables { 
-            display: flex; justify-content: center; gap: 10px; 
-            margin: 30px 0; flex-wrap: wrap; min-height: 120px;
-            padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
+        .lobby-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
         }
-        
-        .drag-item { 
-            padding: 10px 18px; background: #ffcc00; color: #000; 
-            border-radius: 8px; cursor: grab; font-weight: bold; 
-            font-size: 1rem; touch-action: none; user-select: none;
-        }
-        
-        .drop-zones { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
-        
-        .zone {
-            width: 380px; min-height: 250px; height: auto;
-            border: 3px dashed #777; border-radius: 15px;
-            display: flex; flex-wrap: wrap; align-content: flex-start;
-            justify-content: center; gap: 8px; padding: 20px;
-            transition: 0.3s; background: rgba(255,255,255,0.03);
-        }
-        .zone.hover { border-color: #fff; background: rgba(255,255,255,0.1); }
-        .zone h3 { width: 100%; text-align: center; margin-bottom: 15px; pointer-events: none; }
 
-        .game-btn {
-            padding: 12px 25px; font-size: 1.1rem; font-weight: bold;
-            color: white; background: #007bff; border: none;
-            border-radius: 8px; cursor: pointer; transition: 0.2s; margin: 5px;
+        .game-selection-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-top: 20px;
         }
-        .game-btn:hover { background: #0056b3; transform: scale(1.05); }
-        .back-btn { background: #555; font-size: 0.9rem; margin-bottom: 20px; }
 
-        .correct-answer { background: #28a745 !important; color: white !important; border: 2px solid white; }
-        .wrong-answer { background: #dc3545 !important; color: white !important; border: 2px solid white; }
+        /* Стиль карточки игры в меню */
+        .ui-game-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+            padding: 40px;
+            width: 280px;
+            transition: transform 0.4s, background 0.3s;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Эффект при наведении на карточку */
+        .ui-game-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-15px); /* Карточка всплывает */
+            border-color: #ffcc00;
+        }
+
+        /* --- ИГРОВОЙ ЭКРАН --- */
+        #sorting-game-engine {
+            display: none; /* Скрыто, пока не нажмем кнопку 'Start' */
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        /* Контейнер для карточек, которые нужно сортировать */
+        .item-source-vault {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            min-height: 150px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+        }
+
+        /* Стиль самих перетаскиваемых карточек (слов) */
+        .drag-item {
+            padding: 14px 22px;
+            background: linear-gradient(145deg, #ffcc00, #e6b800);
+            color: #1a1a1a;
+            border-radius: 12px;
+            cursor: grab;
+            font-weight: 800;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            touch-action: none; /* Отключает стандартный скролл при касании, чтобы работал Drag-and-Drop */
+        }
+
+        /* Стиль корзин (UK и Poland) */
+        .culture-bin {
+            width: 400px;
+            min-height: 280px;
+            height: auto;
+            border: 4px dashed #555555;
+            border-radius: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            justify-content: center;
+            gap: 12px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        /* Подсветка корзины, когда над ней держат карточку */
+        .culture-bin.drag-over-active {
+            border-color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* --- КНОПКИ УПРАВЛЕНИЯ --- */
+        .action-button {
+            padding: 16px 35px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 10px;
+        }
+
+        .btn-reset { background-color: #6c757d; } /* Серый цвет для сброса */
+        .btn-check { background-color: #28a745; } /* Зеленый для проверки */
+
+        /* Цвета после проверки */
+        .status-correct { background: #28a745 !important; color: white !important; }
+        .status-wrong { background: #dc3545 !important; color: white !important; }
+
+        .result-score-display {
+            margin-top: 35px;
+            font-size: 2rem;
+            color: #ffcc00;
+        }
     </style>
 </head>
 
@@ -78,54 +159,49 @@
         <main class="container">
             <section class="game-section">
                 
-                <div id="game-lobby">
-                    <h1>Choose Your Challenge</h1>
-                    <div class="game-nav">
-                        <div class="game-card" onclick="openGame('sorting-game')">
-                            <h3>🧩 Sorting Game</h3>
-                            <p>Test your knowledge of UK and Poland!</p>
-                            <button class="game-btn">Play Now</button>
-                        </div>
-                        <div class="game-card" style="opacity: 0.5; cursor: not-allowed;">
-                            <h3>🧠 Memory Cards</h3>
-                            <p>Coming soon!</p>
+                <div id="game-lobby-screen">
+                    <h1 class="lobby-title">Entertainment Portal</h1>
+                    <div class="game-selection-wrapper">
+                        <div class="ui-game-card" onclick="initiateSortingGame()">
+                            <h3>🧩 Sorting Master</h3>
+                            <p>Распределите символы между Великобританией и Польшей.</p>
+                            <button class="action-button">Play Now</button>
                         </div>
                     </div>
                 </div>
 
-                <div id="sorting-game">
-                    <button onclick="backToLobby()" class="game-btn back-btn">← Back to Menu</button>
-                    <h1>Country Sorter</h1>
-                    <p>Drag items into the correct boxes!</p>
+                <div id="sorting-game-engine">
+                    <button onclick="returnToLobby()" class="action-button btn-reset">← Back to Menu</button>
+                    <h1>The Great Cultural Sort</h1>
 
-                    <div class="draggables" id="items-box">
-                        <div class="drag-item" draggable="true" id="item1" data-target="uk">Big Ben 🕰️</div>
-                        <div class="drag-item" draggable="true" id="item2" data-target="pl">Pierogi 🥟</div>
-                        <div class="drag-item" draggable="true" id="item3" data-target="uk">Double Decker 🚌</div>
-                        <div class="drag-item" draggable="true" id="item4" data-target="pl">Żubr 🐂</div>
-                        <div class="drag-item" draggable="true" id="item5" data-target="uk">Royal Guard 💂</div>
-                        <div class="drag-item" draggable="true" id="item6" data-target="pl">Wawel Dragon 🐉</div>
-                        <div class="drag-item" draggable="true" id="item7" data-target="uk">Red Telephone Box ☎️</div>
-                        <div class="drag-item" draggable="true" id="item8" data-target="uk">Cricket Bat 🏏</div>
-                        <div class="drag-item" draggable="true" id="item9" data-target="uk">Cup of Tea ☕</div>
-                        <div class="drag-item" draggable="true" id="item10" data-target="pl">Oscypek 🧀</div>
-                        <div class="drag-item" draggable="true" id="item11" data-target="pl">Syrenka 🧜‍♀️</div>
-                        <div class="drag-item" draggable="true" id="item12" data-target="uk">Sherlock Holmes 🕵️</div>
-                        <div class="drag-item" draggable="true" id="item13" data-target="uk">Stonehenge 🏛️</div>
-                        <div class="drag-item" draggable="true" id="item14" data-target="pl">Zapiekanka 🥖</div>
-                        <div class="drag-item" draggable="true" id="item15" data-target="pl">Fryderyk Chopin 🎹</div>
-                        <div class="drag-item" draggable="true" id="item16" data-target="pl">Amber 💎</div>
+                    <div class="item-source-vault" id="global-items-container">
+                        <div class="drag-item" draggable="true" id="node-1" data-target="uk">Big Ben 🕰️</div>
+                        <div class="drag-item" draggable="true" id="node-2" data-target="pl">Pierogi 🥟</div>
+                        <div class="drag-item" draggable="true" id="node-3" data-target="uk">Double Decker 🚌</div>
+                        <div class="drag-item" draggable="true" id="node-4" data-target="pl">Żubr 🐂</div>
+                        <div class="drag-item" draggable="true" id="node-5" data-target="uk">Royal Guard 💂</div>
+                        <div class="drag-item" draggable="true" id="node-6" data-target="pl">Wawel Dragon 🐉</div>
+                        <div class="drag-item" draggable="true" id="node-7" data-target="uk">Red Telephone Box ☎️</div>
+                        <div class="drag-item" draggable="true" id="node-8" data-target="uk">Cricket Bat 🏏</div>
+                        <div class="drag-item" draggable="true" id="node-9" data-target="uk">Cup of Tea ☕</div>
+                        <div class="drag-item" draggable="true" id="node-10" data-target="pl">Oscypek 🧀</div>
+                        <div class="drag-item" draggable="true" id="node-11" data-target="pl">Syrenka 🧜‍♀️</div>
+                        <div class="drag-item" draggable="true" id="node-12" data-target="uk">Sherlock Holmes 🕵️</div>
+                        <div class="drag-item" draggable="true" id="node-13" data-target="uk">Stonehenge 🏛️</div>
+                        <div class="drag-item" draggable="true" id="node-14" data-target="pl">Zapiekanka 🥖</div>
+                        <div class="drag-item" draggable="true" id="node-15" data-target="pl">Fryderyk Chopin 🎹</div>
+                        <div class="drag-item" draggable="true" id="node-16" data-target="pl">Amber (Bursztyn) 💎</div>
                     </div>
 
-                    <div class="drop-zones">
-                        <div class="zone" id="uk"><h3>🇬🇧 UK</h3></div>
-                        <div class="zone" id="pl"><h3>🇵🇱 POLAND</h3></div>
+                    <div class="target-drop-zones">
+                        <div class="culture-bin" id="uk"><h3>🇬🇧 UNITED KINGDOM</h3></div>
+                        <div class="culture-bin" id="pl"><h3>🇵🇱 POLAND</h3></div>
                     </div>
 
-                    <div style="margin-top: 30px;">
-                        <button id="check-btn" class="game-btn" style="background: #28a745;">Check Results</button>
-                        <button id="reset-btn" class="game-btn" style="background: #666;">Reset Game</button>
-                        <h2 id="scoretext" style="margin-top: 20px; min-height: 40px;"></h2>
+                    <div style="margin-top: 40px;">
+                        <button id="final-validation-btn" class="action-button btn-check">Check Results</button>
+                        <button id="system-reset-btn" class="action-button btn-reset">Clear Board</button>
+                        <div id="visual-score-output" class="result-score-display"></div>
                     </div>
                 </div>
 
@@ -134,92 +210,108 @@
     </div>
 
     <script>
-        const items = document.querySelectorAll('.drag-item');
-        const zones = document.querySelectorAll('.zone');
-        const checkBtn = document.getElementById('check-btn');
-        const resetBtn = document.getElementById('reset-btn');
-        const scoreDisplay = document.getElementById('scoretext');
-        const itemsBox = document.getElementById('items-box');
+        /* --- ПЕРЕМЕННЫЕ --- */
+        const allGameNodes = document.querySelectorAll('.drag-item'); // Все карточки
+        const dropContainers = document.querySelectorAll('.culture-bin'); // Корзины
+        const mainVault = document.getElementById('global-items-container'); // Стартовый ящик
 
-        // --- РАНДОМАЙЗЕР ---
-        function shuffleItems() {
-            const elements = Array.from(itemsBox.children);
-            for (let i = elements.length - 1; i > 0; i--) {
+        /* --- НАВИГАЦИЯ (ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ) --- */
+        function initiateSortingGame() {
+            // Прячем меню, показываем игру
+            document.getElementById('game-lobby-screen').style.display = 'none';
+            const engine = document.getElementById('sorting-game-engine');
+            engine.style.display = 'block';
+            setTimeout(() => { engine.style.opacity = '1'; }, 50);
+            scrambleElements(); // Перемешиваем при старте
+        }
+
+        function returnToLobby() {
+            // Возвращаемся в меню
+            document.getElementById('game-lobby-screen').style.display = 'block';
+            document.getElementById('sorting-game-engine').style.display = 'none';
+            performSystemReset(); // Сбрасываем игру
+        }
+
+        /* --- ФУНКЦИЯ РАНДОМА (ПЕРЕМЕШИВАНИЕ) --- */
+        function scrambleElements() {
+            const fragments = Array.from(mainVault.children);
+            for (let i = fragments.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                itemsBox.appendChild(elements[j]);
+                mainVault.appendChild(fragments[j]); // Переставляем местами
             }
         }
 
-        function openGame(gameId) {
-            document.getElementById('game-lobby').style.display = 'none';
-            document.getElementById(gameId).style.display = 'block';
-            shuffleItems(); // Перемешиваем при открытии
-        }
+        /* --- ЛОГИКА ПЕРЕТАСКИВАНИЯ (ДЛЯ МЫШКИ И ТАЧСКРИНА) --- */
+        allGameNodes.forEach(node => {
+            // Старт перетаскивания (мышь)
+            node.addEventListener('dragstart', (event) => {
+                event.dataTransfer.setData('text', event.target.id);
+            });
 
-        function backToLobby() {
-            document.getElementById('game-lobby').style.display = 'block';
-            document.getElementById('sorting-game').style.display = 'none';
-            resetGame();
-        }
-
-        // --- ЛОГИКА MOUSE & TOUCH ---
-        items.forEach(item => {
-            item.addEventListener('dragstart', (e) => e.dataTransfer.setData('text', e.target.id));
-
-            item.addEventListener('touchstart', function(e) {
-                window.draggedItem = this;
-                this.style.opacity = '0.5';
+            // Старт касания (палец)
+            node.addEventListener('touchstart', function(event) {
+                window.activeDraggingNode = this; // Запоминаем, что тащим
+                this.style.opacity = '0.7';
             }, {passive: true});
 
-            item.addEventListener('touchend', function(e) {
+            // Конец касания (палец)
+            node.addEventListener('touchend', function(event) {
                 this.style.opacity = '1';
-                const touch = e.changedTouches[0];
-                const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
-                const zone = targetElement ? targetElement.closest('.zone') : null;
-                if (zone) zone.appendChild(this);
-                window.draggedItem = null;
+                const touch = event.changedTouches[0];
+                // Находим, над каким элементом сейчас палец
+                const elementUnderPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+                const targetZone = elementUnderPoint ? elementUnderPoint.closest('.culture-bin') : null;
+                
+                if (targetZone) {
+                    targetZone.appendChild(this); // Если это корзина — кладем туда
+                }
+                window.activeDraggingNode = null;
             });
 
-            item.addEventListener('touchmove', (e) => { if(window.draggedItem) e.preventDefault(); }, {passive: false});
+            // Отключаем скролл экрана, когда тащим пальцем карточку
+            node.addEventListener('touchmove', (e) => { if(window.activeDraggingNode) e.preventDefault(); }, {passive: false});
         });
 
-        zones.forEach(zone => {
-            zone.addEventListener('dragover', (e) => e.preventDefault());
-            zone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                const id = e.dataTransfer.getData('text');
-                zone.appendChild(document.getElementById(id));
+        // Работа с корзинами
+        dropContainers.forEach(container => {
+            container.addEventListener('dragover', (e) => e.preventDefault()); // Разрешаем сброс
+            container.addEventListener('drop', (event) => {
+                event.preventDefault();
+                const elementID = event.dataTransfer.getData('text');
+                const draggedElement = document.getElementById(elementID);
+                container.appendChild(draggedElement); // Перемещаем карточку в корзину
             });
         });
 
-        // --- КНОПКИ ---
-        checkBtn.onclick = function() {
+        /* --- ПРОВЕРКА ОЧКОВ --- */
+        document.getElementById('final-validation-btn').onclick = function() {
             let score = 0;
-            let totalInZones = 0;
-            items.forEach(item => {
-                const parent = item.parentElement;
-                if (parent.classList.contains('zone')) {
-                    totalInZones++;
-                    if (item.dataset.target === parent.id) {
-                        item.classList.add('correct-answer');
+            allGameNodes.forEach(node => {
+                const currentParent = node.parentElement;
+                if (currentParent.classList.contains('culture-bin')) {
+                    // Если ID корзины совпадает с целью (data-target) карточки
+                    if (node.dataset.target === currentParent.id) {
+                        node.classList.add('status-correct');
                         score++;
                     } else {
-                        item.classList.add('wrong-answer');
+                        node.classList.add('status-wrong');
                     }
                 }
             });
-            scoreDisplay.innerText = totalInZones > 0 ? `Score: ${score} / ${items.length}` : "Drag items first!";
+            document.getElementById('visual-score-output').innerText = "Score: " + score + " / 16";
         };
 
-        function resetGame() {
-            items.forEach(item => {
-                item.classList.remove('correct-answer', 'wrong-answer');
-                itemsBox.appendChild(item);
+        /* --- СБРОС ИГРЫ --- */
+        function performSystemReset() {
+            allGameNodes.forEach(node => {
+                node.classList.remove('status-correct', 'status-wrong');
+                mainVault.appendChild(node); // Возвращаем в стартовый ящик
             });
-            scoreDisplay.innerText = "";
-            shuffleItems();
+            document.getElementById('visual-score-output').innerText = "";
+            scrambleElements(); // Снова перемешиваем
         }
-        resetBtn.onclick = resetGame;
+
+        document.getElementById('system-reset-btn').onclick = performSystemReset;
 
     </script>
 </body>
