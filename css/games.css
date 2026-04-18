@@ -172,26 +172,69 @@
         min-width: auto;
     }
 }
-/* --- СТИЛИ ДЛЯ MEMORY MATCH --- */
-.memory-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 120px); /* 4 колонки по 120px */
-    gap: 15px;
-    justify-content: center;
-    margin: 40px auto;
-    perspective: 1000px; /* Эффект глубины для переворота */
+/* --- MEMORY GAME STYLES --- */
+
+/* Верхняя панель */
+.game-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
 }
 
+.stats-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.stat-divider {
+    width: 1px;
+    height: 30px;
+    background: rgba(255,255,255,0.2);
+}
+
+.stat-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label { font-size: 0.7rem; color: #aaa; text-transform: uppercase; }
+.stat-value { font-size: 1.4rem; color: #ffcc00; font-weight: bold; }
+
+/* Сетка игры */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 120px);
+    gap: 15px;
+    justify-content: center;
+    perspective: 1000px;
+    margin-bottom: 50px;
+}
+
+/* Карточка и анимация */
 .memory-card {
     width: 120px;
     height: 120px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.5s;
     cursor: pointer;
 }
 
-.memory-card.flipped {
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.memory-card.flipped .card-inner {
     transform: rotateY(180deg);
 }
 
@@ -199,19 +242,19 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden; /* Скрывает заднюю сторону при повороте */
+    backface-visibility: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 2.5rem;
     border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 .card-front {
     background: #2c3e50;
     color: #ffcc00;
-    border: 2px solid #34495e;
+    border: 2px solid #3e5871;
 }
 
 .card-back {
@@ -219,35 +262,18 @@
     transform: rotateY(180deg);
 }
 
-/* Статистика над игрой */
-.stat-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.memory-card.matched {
+    cursor: default;
+    opacity: 0.7;
 }
 
-.stat-label {
-    font-size: 0.8rem;
-    color: #aaaaaa;
-    text-transform: uppercase;
-}
-
-.stat-value {
-    font-size: 1.5rem;
-    color: #ffcc00;
-}
-
-/* Адаптивность для телефонов */
-@media (max-width: 550px) {
+/* Адаптивность */
+@media (max-width: 600px) {
     .memory-grid {
         grid-template-columns: repeat(4, 80px);
         gap: 10px;
     }
-    .memory-card {
-        width: 80px;
-        height: 80px;
-    }
-    .card-front, .card-back {
-        font-size: 1.8rem;
-    }
+    .memory-card { width: 80px; height: 80px; }
+    .card-front, .card-back { font-size: 1.5rem; }
+    .game-top-bar { flex-direction: column; gap: 15px; }
 }
