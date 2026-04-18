@@ -10,13 +10,9 @@
     margin-bottom: 50px;
 }
 
-/* Контейнер для карточек, чтобы они стояли в ряд */
+/* --- ЛОББИ --- */
 .game-lobby-container {
-    display: flex;            /* Включаем flexbox */
-    flex-direction: row;      /* Располагаем горизонтально */
-    justify-content: center;  /* Центрируем по горизонтали */
-    gap: 30px;                /* Расстояние между карточками */
-    flex-wrap: wrap;          /* Чтобы на узких экранах они переносились */
+    display: block;
     transition: all 0.5s ease;
 }
 
@@ -144,17 +140,9 @@
 
 .result-score-display {
     margin-top: 30px;
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #ffcc00;
-    font-weight: 900;
-    text-transform: uppercase;
-    text-shadow: 0 0 15px rgba(255, 204, 0, 0.4); /* Эффект свечения */
-    background: rgba(255, 255, 255, 0.05);
-    padding: 15px 40px;
-    border-radius: 50px;
-    display: inline-block;
-    border: 1px solid rgba(255, 204, 0, 0.3);
-    letter-spacing: 2px;
+    font-weight: bold;
 }
 
 /* Мобильная адаптация */
