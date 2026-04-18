@@ -311,3 +311,34 @@
         display: flex;
         gap: 15px;
         justify-content: center;
+
+                .word-display {
+            font-size: 3rem;
+            letter-spacing: 10px;
+            color: #ffcc00;
+            margin: 20px 0;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .word-input {
+            padding: 12px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            border: 2px solid #3498db;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            width: 280px;
+            text-align: center;
+            outline: none;
+        }
+        .hint-text { color: #aaa; font-style: italic; margin-bottom: 20px; }
+        .stats-info { margin-bottom: 20px; font-size: 1.1rem; color: #3498db; }
+        
+        /* Стили для финального экрана */
+        .final-results {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #3498db;
+        }
+        .score-big { font-size: 4rem; color: #ffcc00; margin: 20px 0; }
