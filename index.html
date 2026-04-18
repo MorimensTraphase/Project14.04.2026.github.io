@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Home</title>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/clicker.css">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
@@ -23,31 +24,52 @@
             </nav>
         </header>
 
-     <main class="hero container">
-    <div class="hero--info">
-            <div class="build">
-                <h2>🇬🇧 English & Polish 🇵🇱</h2>
-                <br><br>
-        <h1 style="margin-bottom: 30px;">An interactive project about language and culture.</h1>
-        
-                <p>This website was created to explore the intricacies of the English and Polish languages. We'll compare traditions, explore funny idioms, and test your knowledge.</p>
+        <main class="hero container">
+            <div class="hero--info">
+                <div class="build">
+                    <h2>🇬🇧 English & Polish 🇵🇱</h2>
+                    <br><br>
+                    <h1 style="margin-bottom: 30px;">An interactive project about language and culture.</h1>
+                    <p>This website was created to explore the intricacies of the English and Polish languages. We'll compare traditions, explore funny idioms, and test your knowledge.</p>
+                </div>
+                
+                <div class="build">
+                    <h3>Language</h3>
+                    <p>Learn about translators' "false friends" and slang.</p>
+                </div>
+                
+                <div class="build">
+                    <h3>Culture</h3>
+                    <p>Comparing holidays and everyday habits.</p>
+                </div>
             </div>
-            
-            <div class="build">
-                <h3>Language</h3>
-                <p>Learn about translators' "false friends" and slang.</p>
-            </div>
-            
-            <div class="build">
-                <h3>Culture</h3>
-                <p>Comparing holidays and everyday habits.</p>
-            </div>
-        </div>
-</main>
+        </main>
 
         <footer class="footer container">
-            <p>&copy; 2026 English Language Project | Created by Herman</p>
+            <p>&copy; 2026 English Language Project | Created by Herman<span onclick="toggleCasino()" style="cursor: default; opacity: 0.5;">.</span></p>
         </footer>
-    </div> 
+
+        <div id="casino-overlay" class="casino-overlay" style="display: none;">
+            <div class="casino-content">
+                <button class="close-btn" onclick="toggleCasino()">×</button>
+                <h2 style="color: #ffcc00;">🎰 Underground Casino</h2>
+                <p>You found the secret entrance!</p>
+                <p style="margin-top: 20px;">Go to <strong>Mini Games -> Coin Tycoon</strong> to earn coins and play here!</p>
+                <br>
+                <a href="clicker.html" class="action-button" style="background: #ffcc00; color: #000; text-decoration: none; padding: 10px 20px; border-radius: 5px;">Go to Clicker</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleCasino() {
+            const casino = document.getElementById('casino-overlay');
+            if (casino.style.display === 'none') {
+                casino.style.display = 'flex';
+            } else {
+                casino.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
