@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/games.css">
+</head>
+<body style="background: transparent;"> <div id="sorting-game-engine">
+        <h1>🧩 Sorting Master</h1>
+
+        <div class="item-source-vault" id="global-items-container">
+            <div class="drag-item" draggable="true" id="node-1" data-target="uk">Big Ben 🕰️</div>
+            <div class="drag-item" draggable="true" id="node-2" data-target="pl">Pierogi 🥟</div>
+            <div class="drag-item" draggable="true" id="node-3" data-target="uk">Double Decker 🚌</div>
+            <div class="drag-item" draggable="true" id="node-4" data-target="pl">Żubr 🐂</div>
+            <div class="drag-item" draggable="true" id="node-5" data-target="uk">Royal Guard 💂</div>
+            <div class="drag-item" draggable="true" id="node-6" data-target="pl">Wawel Dragon 🐉</div>
+            <div class="drag-item" draggable="true" id="node-7" data-target="uk">Red Telephone Box ☎️</div>
+            <div class="drag-item" draggable="true" id="node-10" data-target="pl">Oscypek 🧀</div>
+            <div class="drag-item" draggable="true" id="node-11" data-target="pl">Syrenka 🧜‍♀️</div>
+            <div class="drag-item" draggable="true" id="node-16" data-target="pl">Amber 💎</div>
+        </div>
+
+        <div class="target-drop-zones">
+            <div class="culture-bin" id="uk"><h3>🇬🇧 UNITED KINGDOM</h3></div>
+            <div class="culture-bin" id="pl"><h3>🇵🇱 POLAND</h3></div>
+        </div>
+
+        <div class="game-controls">
+            <button id="final-validation-btn" class="action-button btn-check">Check Results</button>
+            <button id="system-reset-btn" class="action-button btn-reset">Clear Board</button>
+            <div id="visual-score-output" class="result-score-display"></div>
+        </div>
+    </div>
+
+    <script>
+        const allGameNodes = document.querySelectorAll('.drag-item');
+        const dropContainers = document.querySelectorAll('.culture-bin');
+        const mainVault = document.getElementById('global-items-container');
+
+        // Перемешивание при загрузке
+        (function scramble() {
+            const fragments = Array.from(mainVault.children);
+            for (let i = fragments.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                mainVault.appendChild(fragments[j]);
+            }
+        })();
+
+        allGameNodes.forEach(node => {
+            node.addEventListener('dragstart', (e) => e.dataTransfer.setData('text', e.target.id));
+            
+            // Touch для мобилок
+            node.addEventListener('touchstart', function(e) {
+                window.activeDraggingNode = this;
+                this.style.opacity = '0.7';
+            }, {passive: true});
+
+            node.addEventListener('touchend', function(e) {
+                this.style.opacity = '1';
+                const touch = e.changedTouches[0];
+                const target = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.culture-bin');
+                if (target) target.appendChild(this);
+            });
+        });
+
+        dropContainers.forEach(container => {
+            container.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                container.classList.add('drag-over-active');
+            });
+            container.addEventListener('dragleave', () => container.classList.remove('drag-over-active'));
+            container.addEventListener('drop', (e) => {
+                e.preventDefault();
+                container.classList.remove('drag-over-active');
+                const id = e.dataTransfer.getData('text');
+                container.appendChild(document.getElementById(id));
+            });
+        });
+
+        document.getElementById('final-validation-btn').onclick = function() {
+            let score = 0;
+            allGameNodes.forEach(node => {
+                const parent = node.parentElement;
+                if (parent.classList.contains('culture-bin')) {
+                    if (node.dataset.target === parent.id) {
+                        node.classList.add('status-correct');
+                        score++;
+                    } else {
+                        node.classList.add('status-wrong');
+                    }
+                }
+            });
+            document.getElementById('visual-score-output').innerText = "Final Score: " + score + " / " + allGameNodes.length;
+        };
+
+        document.getElementById('system-reset-btn').onclick = function() {
+            allGameNodes.forEach(node => {
+                node.classList.remove('status-correct', 'status-wrong');
+                mainVault.appendChild(node);
+            });
+            document.getElementById('visual-score-output').innerText = "";
+        };
+    </script>
+</body>
+</html>
