@@ -172,3 +172,82 @@
         min-width: auto;
     }
 }
+/* --- СТИЛИ ДЛЯ MEMORY MATCH --- */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 120px); /* 4 колонки по 120px */
+    gap: 15px;
+    justify-content: center;
+    margin: 40px auto;
+    perspective: 1000px; /* Эффект глубины для переворота */
+}
+
+.memory-card {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+    cursor: pointer;
+}
+
+.memory-card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Скрывает заднюю сторону при повороте */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.card-front {
+    background: #2c3e50;
+    color: #ffcc00;
+    border: 2px solid #34495e;
+}
+
+.card-back {
+    background: #ffcc00;
+    transform: rotateY(180deg);
+}
+
+/* Статистика над игрой */
+.stat-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #aaaaaa;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    color: #ffcc00;
+}
+
+/* Адаптивность для телефонов */
+@media (max-width: 550px) {
+    .memory-grid {
+        grid-template-columns: repeat(4, 80px);
+        gap: 10px;
+    }
+    .memory-card {
+        width: 80px;
+        height: 80px;
+    }
+    .card-front, .card-back {
+        font-size: 1.8rem;
+    }
+}
