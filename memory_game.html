@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Memory Match</title>
     <link rel="stylesheet" href="css/games.css"> 
-    <link rel="stylesheet" href="css/video.css">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
@@ -25,15 +24,15 @@
 
         <main class="container">
             <section class="game-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; max-width: 900px; margin: 0 auto;">
-                    <a href="games.html" class="action-button btn-reset" style="text-decoration: none;">← Exit</a>
+                <div class="game-top-bar">
+                    <a href="games.html" class="action-button btn-reset">← Exit</a>
                     
-                    <div class="result-score-display" id="stat-line">
+                    <div class="stats-container">
                         <div class="stat-group">
                             <span class="stat-label">PAIRS</span>
                             <span class="stat-value"><span id="match-count">0</span> / 8</span>
                         </div>
-                        <div style="width: 1px; height: 30px; background: rgba(255,255,255,0.2);"></div>
+                        <div class="stat-divider"></div>
                         <div class="stat-group">
                             <span class="stat-label">MOVES</span>
                             <span class="stat-value" id="move-count">0</span>
@@ -63,14 +62,21 @@
         function createBoard() {
             const board = document.getElementById('game-board');
             board.innerHTML = '';
-            shuffle(cards).forEach((icon, index) => {
+            const shuffledCards = shuffle([...cards]);
+            
+            shuffledCards.forEach((icon) => {
                 const card = document.createElement('div');
                 card.classList.add('memory-card');
                 card.dataset.icon = icon;
+                
+                // Важно: создаем две стороны для 3D эффекта
                 card.innerHTML = `
-                    <div class="card-front">?</div>
-                    <div class="card-back">${icon}</div>
+                    <div class="card-inner">
+                        <div class="card-front">?</div>
+                        <div class="card-back">${icon}</div>
+                    </div>
                 `;
+                
                 card.addEventListener('click', flipCard);
                 board.appendChild(card);
             });
@@ -102,7 +108,7 @@
                 updateStats();
                 
                 if (matches === icons.length) {
-                    setTimeout(() => alert(`Victory! You found all pairs in ${moves} moves.`), 500);
+                    setTimeout(() => alert(`Victory! Moves: ${moves}`), 500);
                 }
             } else {
                 setTimeout(() => {
