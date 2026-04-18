@@ -7,32 +7,6 @@
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
-    <style>
-        .word-display {
-            font-size: 3rem;
-            letter-spacing: 10px;
-            color: #ffcc00;
-            margin: 20px 0;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-        .input-area {
-            margin: 20px 0;
-        }
-        .word-input {
-            padding: 10px;
-            font-size: 1.2rem;
-            border-radius: 5px;
-            border: none;
-            width: 250px;
-            text-align: center;
-        }
-        .hint-text {
-            color: #aaa;
-            font-style: italic;
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -53,29 +27,38 @@
         <main class="container">
             <section class="game-section">
                 <h1>🔠 Word Scramble</h1>
-                <p>Unscramble the word related to UK or Poland!</p>
                 
-                <div class="game-container">
+                <div id="game-container" class="game-container">
+                    <div class="stats-info">Word: <span id="current-index">1</span> / <span id="total-words">0</span></div>
+                    
                     <div id="scrambled-word" class="word-display">-----</div>
-                    <p id="hint" class="hint-text">Hint will appear here</p>
+                    <p id="hint" class="hint-text">Hint</p>
                     
                     <div class="input-area">
-                        <input type="text" id="user-guess" class="word-input" placeholder="Type here..." autocomplete="off">
+                        <input type="text" id="user-guess" class="word-input" placeholder="Your answer..." autocomplete="off">
                     </div>
                     
-                    <div class="button-group">
-                        <button class="action-button" onclick="checkWord()">Check Word</button>
-                        <button class="action-button" onclick="initGame()" style="background: #444;">New Word</button>
+                    <div class="button-group" style="margin-top: 20px;">
+                        <button class="action-button" onclick="submitAnswer()">Submit Answer</button>
                     </div>
                     
-                    <p id="message" style="margin-top: 20px; font-weight: bold;"></p>
+                    <p id="message" style="margin-top: 20px; font-weight: bold; min-height: 24px;"></p>
+                </div>
+
+                <div id="result-screen" class="final-results" style="display: none;">
+                    <h2>Challenge Complete!</h2>
+                    <div class="score-big" id="final-score-display">0 / 0</div>
+                    <p id="rank-message"></p>
+                    <button class="action-button" onclick="location.reload()" style="margin-top: 20px;">Play Again</button>
+                    <br>
+                    <a href="games.html" style="display:inline-block; margin-top:15px; color:#aaa;">Back to Games</a>
                 </div>
             </section>
         </main>
     </div>
 
     <script>
-        const words = [
+        const wordsData = [
             { word: "LONDON", hint: "Capital of the UK 🇬🇧" },
             { word: "WARSAW", hint: "Capital of Poland 🇵🇱" },
             { word: "PIEROGI", hint: "Famous Polish dumplings 🥟" },
@@ -85,45 +68,71 @@
             { word: "BISON", hint: "The king of the Białowieża Forest 🦬" }
         ];
 
-        let currentWord = "";
-
-        function scramble(word) {
-            return word.split('').sort(() => Math.random() - 0.5).join('');
-        }
+        let currentIndex = 0;
+        let score = 0;
+        let shuffledWords = [];
 
         function initGame() {
-            const randomObj = words[Math.floor(Math.random() * words.length)];
-            currentWord = randomObj.word;
-            let scrambled = scramble(currentWord);
-            
-            // Чтобы не выпало случайно правильное слово
-            while(scrambled === currentWord) {
-                scrambled = scramble(currentWord);
-            }
-
-            document.getElementById("scrambled-word").innerText = scrambled;
-            document.getElementById("hint").innerText = "Hint: " + randomObj.hint;
-            document.getElementById("message").innerText = "";
-            document.getElementById("user-guess").value = "";
+            // Перемешиваем список слов, чтобы порядок всегда был разный
+            shuffledWords = [...wordsData].sort(() => Math.random() - 0.5);
+            document.getElementById("total-words").innerText = shuffledWords.length;
+            showWord();
         }
 
-        function checkWord() {
-            const userGuess = document.getElementById("user-guess").value.toUpperCase();
-            const msg = document.getElementById("message");
-            
-            if (userGuess === currentWord) {
-                msg.innerText = "Correct! 🎉";
-                msg.style.color = "#2ecc71";
-                setTimeout(initGame, 2000);
+        function scramble(word) {
+            let s = word.split('').sort(() => Math.random() - 0.5).join('');
+            return (s === word) ? scramble(word) : s;
+        }
+
+        function showWord() {
+            if (currentIndex < shuffledWords.length) {
+                const currentData = shuffledWords[currentIndex];
+                document.getElementById("current-index").innerText = currentIndex + 1;
+                document.getElementById("scrambled-word").innerText = scramble(currentData.word);
+                document.getElementById("hint").innerText = "Hint: " + currentData.hint;
+                document.getElementById("user-guess").value = "";
+                document.getElementById("message").innerText = "";
             } else {
-                msg.innerText = "Try again! ❌";
+                showFinalResults();
+            }
+        }
+
+        function submitAnswer() {
+            const userGuess = document.getElementById("user-guess").value.toUpperCase().trim();
+            const correctAnswer = shuffledWords[currentIndex].word;
+            const msg = document.getElementById("message");
+
+            if (userGuess === correctAnswer) {
+                score++;
+                msg.innerText = "Correct! ✨";
+                msg.style.color = "#2ecc71";
+            } else {
+                msg.innerText = "Wrong! It was " + correctAnswer;
                 msg.style.color = "#e74c3c";
             }
+
+            // Задержка перед следующим словом, чтобы успеть увидеть результат
+            currentIndex++;
+            setTimeout(showWord, 1500);
         }
 
-        // Запуск по Enter
+        function showFinalResults() {
+            document.getElementById("game-container").style.display = "none";
+            const resScreen = document.getElementById("result-screen");
+            resScreen.style.display = "block";
+            
+            const finalScore = document.getElementById("final-score-display");
+            finalScore.innerText = `${score} / ${shuffledWords.length}`;
+            
+            const rank = document.getElementById("rank-message");
+            if (score === shuffledWords.length) rank.innerText = "Perfect! You're a true expert! 🏆";
+            else if (score >= shuffledWords.length / 2) rank.innerText = "Great job! Almost there! 👍";
+            else rank.innerText = "Keep practicing! You can do better! 💪";
+        }
+
+        // Поддержка Enter
         document.getElementById("user-guess").addEventListener("keypress", function(e) {
-            if (e.key === "Enter") checkWord();
+            if (e.key === "Enter") submitAnswer();
         });
 
         window.onload = initGame;
